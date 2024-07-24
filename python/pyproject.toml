@@ -1,0 +1,28 @@
+[build-system]
+build-backend = "mesonpy"
+requires = ["meson-python>=0.15.0", "numpy", "fpm"]
+
+
+[tool.black]
+line-length = 79
+target-version = ["py310"]
+
+
+[project]
+name = "fexample"
+version = "0.1.0"
+authors = [{name = "Brandolín, Salvador Eduardo", email = "salvadorebrandolin@mi.unc.edu.ar"}]
+license = {text = "MIT License"}
+readme = "README.md"
+description = "Fortran with Python API example"
+keywords = ["Fortran", "API",]
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Scientific/Engineering",
+]
+
+
+urls = {Homepage = "https://github.com/SalvadorBrandolin/fortran_meson_py"}
