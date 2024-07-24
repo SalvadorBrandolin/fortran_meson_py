@@ -1,6 +1,14 @@
 program main
-  use fexample, only: say_hello
-  implicit none
+   use fexample, only: pr, calculate_area, calculate_perimeter
+   implicit none
 
-  call say_hello()
+   real(pr) :: area, perimeter
+   real(pr) :: radius = 3.0_pr
+
+   call calculate_area(radius, area)
+   call  calculate_perimeter(radius, perimeter)
+
+   print *, "Circle radius: ", radius
+   print *, "Circle area: ", area
+   print *, "Circle perimeter: ", perimeter
 end program main
