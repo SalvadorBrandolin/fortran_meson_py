@@ -5,7 +5,7 @@ project('fexample', 'c',
   default_options : ['warning_level=2'],
 )
 
-add_languages('fortran')
+add_languages('fortran', native: true)
 
 meson_path = meson.current_build_dir()
 
@@ -15,7 +15,7 @@ py_dep = py.dependency()
 
 
 incdir_numpy = run_command(py,
-  ['-c', 'import os; os.chdir('.."); import numpy; print(numpy.get_include())'],
+  ['-c', 'import os; os.chdir(".."); import numpy; print(numpy.get_include())'],
   check : true
 ).stdout().strip()
 
@@ -27,7 +27,6 @@ incdir_f2py = run_command(py,
 
 
 inc_np = include_directories(incdir_numpy, incdir_f2py)
-
 
 # fpm?
 fflags = '-g -fPIC -funroll-loops -fstack-arrays -Ofast -frepack-arrays -faggressive-function-elimination -fopenmp'
@@ -45,11 +44,14 @@ run_command(
     cflags,
     '--prefix',
     fpm_build_dir,
+    check : true
 )
 
 # f2py?
+source_path = meson_path / '..' / 'c_wrapper' / 'fexample_c.f90'
+
 potential_source = custom_target('potentialmodule.c',
-  input : ['galaxychop/preproc/fortran/potential.f90'],
+  input : [source_path],
   output : [
     'potentialmodule.c', 
     'potential-f2pywrappers2.f90'

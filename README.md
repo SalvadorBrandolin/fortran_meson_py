@@ -11,4 +11,4 @@ API for different python versions and OS.
 ## For VScode users
 .vscode is recommended to be used: 
 
-git@github.com:ipqa-research/vscode-fortran.git
+[git@github.com:ipqa-research/vscode-fortran.git](git@github.com:ipqa-research/vscode-fortran.git)
