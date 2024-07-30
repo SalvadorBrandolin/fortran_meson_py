@@ -50,12 +50,25 @@ run_command(
 
 # f2py?
 source_path = meson_path / '..' / '..' / '..' / 'c_wrapper' / 'fexample_c.f90'
-library_path = fpm_build_dir / 'bin'
+library_path = fpm_build_dir / 'lib'
+include_path = fpm_build_dir / 'include'
 
 fexample_source = custom_target('fexample.c',
-  input: [source_path, library_path],
+  input: [source_path, library_path, include_path],
   output: ['fexample.c', 'fexample-f2pywrappers2.f90'],
-  command: [py, '-m', 'numpy.f2py', '@INPUT0@', '-m', 'fexample', '-c', '-L' + '@INPUT1@', '-lfexample', '--lower']
+  command: [
+    py,
+    '-m',
+    'numpy.f2py',
+    '-m',
+    'fexample',
+    '-c',
+    '-L' + '@INPUT1@',
+    '-I' + '@INPUT2@',
+    '@INPUT0@',
+    '-lfexample',
+    '--lower'
+  ]
 )
 
 py.extension_module('fexample',
@@ -63,5 +76,7 @@ py.extension_module('fexample',
   incdir_f2py / 'fortranobject.c',
   include_directories: inc_np,
   dependencies : py_dep,
-  install : true
+  install : true,
+  subdir: 'fexample/compiled/'
 )
+
