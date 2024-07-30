@@ -5,7 +5,7 @@ project('fexample', 'c',
   default_options : ['warning_level=2'],
 )
 
-add_languages('fortran', native: true)
+add_languages('fortran')
 
 meson_path = meson.current_build_dir()
 
@@ -28,10 +28,11 @@ incdir_f2py = run_command(py,
 
 inc_np = include_directories(incdir_numpy, incdir_f2py)
 
+
 # fpm?
 fflags = '-g -fPIC -funroll-loops -fstack-arrays -Ofast -frepack-arrays -faggressive-function-elimination -fopenmp'
 cflags = '-fPIC'
-fpm_build_dir = meson_path / 'build' / 'python'
+fpm_build_dir = meson_path / 'fpm_build'
 
 run_command(
     'fpm',
@@ -48,29 +49,17 @@ run_command(
 )
 
 # f2py?
-source_path = meson_path / '..' / 'c_wrapper' / 'fexample_c.f90'
+source_path = meson_path / '..' / '..' / '..' / 'c_wrapper' / 'fexample_c.f90'
+library_path = fpm_build_dir / 'bin'
 
-potential_source = custom_target('potentialmodule.c',
-  input : [source_path],
-  output : [
-    'potentialmodule.c', 
-    'potential-f2pywrappers2.f90'
-    ],
-  command : [
-    py, '-m', 'numpy.f2py', '@INPUT@', 
-    '-m', 'potential', '--lower'
-  ]
+fexample_source = custom_target('fexample.c',
+  input: [source_path, library_path],
+  output: ['fexample.c', 'fexample-f2pywrappers2.f90'],
+  command: [py, '-m', 'numpy.f2py', '@INPUT0@', '-m', 'fexample', '-c', '-L' + '@INPUT1@', '-lfexample', '--lower']
 )
 
-f_sources = ['galaxychop/preproc/fortran/__init__.py']
-py.install_sources(f_sources, subdir:'galaxychop/preproc/fortran')
-
-
-py.extension_module('fib2',
-  [
-    'fib1.f',
-    'fib2module.c',  # note: this assumes f2py was manually run before!
-  ],
+py.extension_module('fexample',
+  [source_path, fexample_source],
   incdir_f2py / 'fortranobject.c',
   include_directories: inc_np,
   dependencies : py_dep,
