@@ -62,7 +62,6 @@ fexample_source = custom_target('fexample.c',
     'numpy.f2py',
     '-m',
     'fexample',
-    '-c',
     '-L' + '@INPUT1@',
     '-I' + '@INPUT2@',
     '@INPUT0@',
@@ -71,10 +70,11 @@ fexample_source = custom_target('fexample.c',
   ]
 )
 
+incdir = 'build' / 'cp312' / 'fpm_build' / 'lib' # / 'libfexample.a'
 py.extension_module('fexample',
   [source_path, fexample_source],
-  incdir_f2py / 'fortranobject.c',
-  include_directories: inc_np,
+  [incdir_f2py / 'fortranobject.c', incdir / 'libfexample.a']
+  include_directories: [inc_np],
   dependencies : py_dep,
   install : true,
   subdir: 'fexample/compiled/'
