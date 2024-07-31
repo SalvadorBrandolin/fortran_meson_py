@@ -26,3 +26,8 @@ classifiers = [
 
 
 urls = {Homepage = "https://github.com/SalvadorBrandolin/fortran_meson_py"}
+
+
+dependencies = [
+    'numpy',
+]
