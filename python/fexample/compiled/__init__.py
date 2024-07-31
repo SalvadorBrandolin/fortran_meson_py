@@ -1,4 +1,4 @@
-from . import fexample_c as fexample_comp
+from .fexample_compiled import fexample_c
 
 
-__all__ = ['fexample_comp']
+__all__ = ["fexample_c"]
