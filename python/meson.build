@@ -5,7 +5,7 @@ project('fexample', 'c',
   default_options : ['warning_level=2'],
 )
 
-add_languages('fortran')
+add_languages('fortran', native: false)
 
 meson_path = meson.current_build_dir()
 
@@ -24,9 +24,6 @@ incdir_f2py = run_command(py,
     ['-c', 'import os; os.chdir(".."); import numpy.f2py; print(numpy.f2py.get_include())'],
     check : true
 ).stdout().strip()
-
-
-inc_np = include_directories(incdir_numpy, incdir_f2py)
 
 
 # fpm?
@@ -49,34 +46,47 @@ run_command(
 )
 
 # f2py?
-source_path = meson_path / '..' / '..' / '..' / 'c_wrapper' / 'fexample_c.f90'
-library_path = fpm_build_dir / 'lib'
-include_path = fpm_build_dir / 'include'
+source_path = meson.source_root() / '..' / 'c_wrapper' / 'fexample_c.f90'
+fexample_c_f90 = files(source_path)
 
-fexample_source = custom_target('fexample.c',
-  input: [source_path, library_path, include_path],
-  output: ['fexample.c', 'fexample-f2pywrappers2.f90'],
+fexample_source = custom_target('fexample_compiled.c',
+  input: fexample_c_f90,
+  output: ['fexample_compiledmodule.c', 'fexample_compiled-f2pywrappers2.f90'],
   command: [
     py,
     '-m',
     'numpy.f2py',
+    '@INPUT@',
     '-m',
-    'fexample',
-    '-L' + '@INPUT1@',
-    '-I' + '@INPUT2@',
-    '@INPUT0@',
-    '-lfexample',
+    'fexample_compiled',
     '--lower'
   ]
 )
 
-incdir = 'build' / 'cp312' / 'fpm_build' / 'lib' # / 'libfexample.a'
-py.extension_module('fexample',
-  [source_path, fexample_source],
-  [incdir_f2py / 'fortranobject.c', incdir / 'libfexample.a']
+# Install Python sources
+f_sources = ['fexample/compiled/__init__.py']
+py.install_sources(f_sources, subdir:'fexample/compiled')
+
+main_sources = ['fexample/__init__.py']
+py.install_sources(main_sources, subdir:'fexample')
+
+circle_sources = [
+  'fexample/circle/__init__.py',
+  'fexample/circle/circle_props.py',
+]
+py.install_sources(circle_sources, subdir:'fexample/circle')
+
+
+# Extension fortran module
+inc_np = include_directories(incdir_numpy, incdir_f2py, 'fpm_build' / 'include')
+
+py.extension_module('fexample_compiled',
+  [fexample_c_f90, fexample_source],
+  incdir_f2py / 'fortranobject.c',
   include_directories: [inc_np],
   dependencies : py_dep,
+  link_args: ['-L' + 'fpm_build' / 'lib', '-lfexample'],
+  subdir: 'fexample' / 'compiled',
   install : true,
-  subdir: 'fexample/compiled/'
 )
 
