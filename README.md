@@ -9,6 +9,4 @@ compilation as link library). Finally, construct different build of the Python
 API for different python versions and OS.
 
 ## For VScode users
-.vscode is recommended to be used: 
-
-[git@github.com:ipqa-research/vscode-fortran.git](git@github.com:ipqa-research/vscode-fortran.git)
+We recommend our custom settings for `vscode`: [link here](https://github.com/ipqa-research/vscode-fortran.git)
