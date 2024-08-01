@@ -8,6 +8,10 @@ line-length = 79
 target-version = ["py310"]
 
 
+[tool.cibuildwheel]
+build = ["cp310-*", "cp311-*", "cp312-*"]
+
+
 [project]
 name = "fexample"
 version = "0.1.0"

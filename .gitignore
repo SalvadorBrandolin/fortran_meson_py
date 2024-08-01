@@ -37,4 +37,5 @@
 __pycache__
 build
 buildir
+.coverage
 wheelhouse
