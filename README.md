@@ -116,7 +116,7 @@ main module of the library, called the same as the library. There we only
 import all the modules of the library.
 
 Finally, the [circle_props.f90](src/circle/circle_props.f90) file contains the
-definition of the `circle_area` and `circle_circumference` subroutines. These
+definition of the `calculate_area` and `calculate_perimeter` subroutines. These
 subroutines are used to calculate the area and circumference of a circle, with
 a given radius. Those are the subroutines that we want to use in our Python
 API.
