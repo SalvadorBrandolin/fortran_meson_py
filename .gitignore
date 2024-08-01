@@ -36,3 +36,5 @@
 # Python
 __pycache__
 build
+.coverage
+wheelhouse
