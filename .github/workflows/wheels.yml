@@ -16,6 +16,20 @@ jobs:
       # Used to host cibuildwheel
       - uses: actions/setup-python@v5
 
+      - name: Install gfortran on Ubuntu
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y gfortran
+
+      - name: Install gfortran on Windows
+        if: matrix.os == 'windows-latest'
+        run: choco install mingw --version=9.0.0
+        env:
+          CHOCO_INSTALL_ARGS: --ignore-checksums
+
+      - name: Install gfortran on macOS
+        if: startsWith(matrix.os, 'macos-')
+        run: brew install gcc
+
       - name: Install cibuildwheel
         run: python -m pip install cibuildwheel==2.19.2
 
