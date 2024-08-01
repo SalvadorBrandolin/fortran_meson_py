@@ -1,9 +1,9 @@
 name = "fexample"
 version = "0.1.0"
 license = "MIT"
-author = "Salvador"
+author = "Salvador Eduardo Brandolín"
 maintainer = "salvadorebrandolin@unc.edu.ar"
-copyright = "Copyright 2024, Salvador"
+copyright = "Copyright 2024, Salvador Eduardo Brandolín"
 
 [build]
 auto-executables = true
