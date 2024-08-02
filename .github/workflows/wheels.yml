@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [windows-latest] # [ubuntu-latest, windows-latest]
 
     steps:
       - uses: actions/checkout@v4
@@ -24,6 +24,11 @@ jobs:
         with:
             compiler: gcc
             version: 13
+
+      # Install fpm for Windows
+      - name: Install fpm
+        if: runner.os == 'Windows'
+        uses: fortran-lang/setup-fpm@v5
 
       # CiBuildWheel
       - name: Install cibuildwheel
