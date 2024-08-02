@@ -15,6 +15,7 @@ target-version = ["py310"]
 
 [tool.cibuildwheel]
 build = ["cp310-*", "cp311-*", "cp312-*"]
+skip = ["*-win32"]
 
 
 [project]
