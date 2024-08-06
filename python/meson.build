@@ -26,7 +26,7 @@ incdir_f2py = run_command(py,
 ).stdout().strip()
 
 
-# fpm?
+# fpm
 fflags = '-g -fPIC -funroll-loops -fstack-arrays -Ofast -frepack-arrays -faggressive-function-elimination -fopenmp'
 cflags = '-fPIC'
 fpm_build_dir = meson_path / 'fpm_build'
@@ -45,7 +45,7 @@ run_command(
     check : true
 )
 
-# f2py?
+# f2py
 source_path = meson.source_root() / '..' / 'c_wrapper' / 'fexample_c.f90'
 fexample_c_f90 = files(source_path)
 
@@ -89,4 +89,3 @@ py.extension_module('fexample_compiled',
   subdir: 'fexample' / 'compiled',
   install : true,
 )
-
