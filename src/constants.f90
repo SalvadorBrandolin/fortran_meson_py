@@ -4,5 +4,5 @@ module fexample_constants
    implicit none
 
    integer, parameter :: pr = real64
-   real(pr) :: pi = 3.141592653589793
+   real(pr) :: pi = 3.141592653589793_pr
 end module fexample_constants

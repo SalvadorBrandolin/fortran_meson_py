@@ -39,3 +39,4 @@ build
 buildir
 .coverage
 wheelhouse
+.pytest_cache
