@@ -212,12 +212,13 @@ file, on the `py.extension`, how that is done.
 This is not really neccesary, buy maybe you want to distribute your python package with `PyPI`. Well, is the moment to obtain a compiled wheel matrix: 
 
 ```
-WheelMatrix = OS you want to support times Python versions you want to support. 
+WheelMatrix = OS you want to support times Python versions you want to support
 ```
 
 On the [.github/workflows/wheels.yml](.github/workflows/wheels.yml) there is an
-action that uses `cibuildwheel` to compile the wheels for the Python API. These
-wheel are not uploaded to `PyPI`, but you can do that with the `twine` package.
+action that uses `cibuildwheel` to compile the wheels for the Python API. The
+wheels are not uploaded to `PyPI`, but you can do that with the `twine`
+package.
 
 ### For VScode users
 .vscode settings are recommended to be used: 
