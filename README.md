@@ -11,6 +11,7 @@
   - [`C` Wrapper](#c-wrapper)
   - [Python API](#python-api)
 - [Miscellaneous](#miscellaneous)
+  - [CI (`cibuildwheel`)](#ci-cibuildwheel)
   - [For VScode users](#for-vscode-users)
 
 
@@ -37,6 +38,13 @@ architectures of Fortran code. It is assumed that an experienced user will be
 capable to adapt the repository to more complex cases. 
 
 ## Previous lectures (if needed)
+We made a post of this topic in ```fortan-lang discussion```. Maybe you can
+understand more the motivations of this repository. Also, you may find 
+commentaries from other users that can help you.
+
+[https://fortran-lang.discourse.group/t/packaging-a-fpm-project-with-python-bindings-a-little-guide-and-insights-from-our-experience/8495](https://fortran-lang.discourse.group/t/packaging-a-fpm-project-with-python-bindings-a-little-guide-and-insights-from-our-experience/8495)
+
+
 ### Fortran
 Little knowledge of Fortran is needed. It's necessary to know how to install a
 Fortran compiler (`gfortran` is used in this example) and the Fortran Package
@@ -133,11 +141,84 @@ calculation...
 > want.
 
 ### `C` Wrapper
+Is kind to have the c_wrapper separated from everything else, but of course you
+can do whatever you want. The [c_wrapper](c_wrapper) directory contains the
+necessary files to build the `C` wrapper of the Fortran library. The `C`
+wrapper uses the `iso_c_binding` module to define subroutines compatible with
+`C` types.
 
+```
+Well, so I have to rewrite all my subroutines compatible with C?
+```
+
+Well, yes... I'm sorry. This is a pain for sure but necessary. Of course, we
+don't have to implement again the subroutines, only the subroutines signatures.
+Inside we call our `fpm` library.
+
+You can check the [fexample_c.f90](c_wrapper/fexample_c.f90) file. There are
+defined the same functions as in `fexample` with addition of `*_c` in their
+names to differentiate them. Also, we differentiate:
+
+  - `fexample`: `fpm` project (`Fortran` library)
+  - `fexample_c`: C-API of `fexample`
 
 ### Python API
+The nightmare begins here (lots of commits till compiles).
+
+In the case of `fexample` there is no big problems, but for a more complex
+library with OOP architecture and lots of linking dependencies in compilations
+will take some time to make it work.
+
+`Fortran` users that are too used to `fpm` capabilities as I (Salvador) and
+don't have much experience dealing with compilations flags, this is your first
+challenge. 
+
+> **Note 3 (Salvador)**: Really this is the true motivation of made this little
+> example. To learn and mess around with a build system and compilations flags.
+> In my `Fortran` language learning path I always used `fpm` and its was fun,
+> its solves all the compilations for me. And for sure I don't want to solve
+> the compilation order of any modern `Fortran` project, `fpm` already does.
+> So, It's possible to compile `fexample` with `fpm`, and the link it with f2py
+> and be happy? We found that meson allows us to do that, and all works pretty
+> fine.
+
+We are using `meson-python` as the build system for the Python library. For that you can check the configurations of:
+
+- [python/meson.build](python/meson.build)
+- [python/pyproject.toml](python/pyproject.toml)
+
+As in any `Python` we provide a [requirements-dev.txt](python/requirements-dev.txt) file with dependencies for developing. But here, we also provided a [build-requirements.txt](python/build-requirements.txt) file with the dependencies for building the Python API. You can check that in the pyproject.toml and build-requirements.txt files the dependencies are the same.
+Why we do that? Because, when developing the package the developer
+need to install the `Python` package in `--editable` mode. With
+`meson-python` it's necessary to manually install the build dependencies and then install the package in `--editable` mode.
+The correct way of doing that is bay the commands:
+
+```shell
+cd python
+pip install -r python/build-requirements.txt
+pip install -e . --no-build-isolation
+```
+
+Then we have the [python/fexample](python/fexample) directory that contains the source code of the python library.
+
+There we have the [python/fexample/compiled](python/fexample/compiled)
+directory that contains the `C` wrapper of the `fexample` library. The `C`
+wrapper is compiled with `f2py` and linked with the `fexample` library, and
+finally, stored in that directory. You can check the meson.build configuration
+file, on the `py.extension`, how that is done.
 
 ## Miscellaneous
+### CI (`cibuildwheel`)
+This is not really neccesary, buy maybe you want to distribute your python package with `PyPI`. Well, is the moment to obtain a compiled wheel matrix: 
+
+```
+WheelMatrix = OS you want to support times Python versions you want to support. 
+```
+
+On the [.github/workflows/wheels.yml](.github/workflows/wheels.yml) there is an
+action that uses `cibuildwheel` to compile the wheels for the Python API. These
+wheel are not uploaded to `PyPI`, but you can do that with the `twine` package.
+
 ### For VScode users
 .vscode settings are recommended to be used: 
 
