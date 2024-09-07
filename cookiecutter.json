@@ -1,0 +1,9 @@
+{
+    "project_name": "my_project",
+    "version": "0.0.1",
+    "description": "Project's description",
+    "author": "Author's name",
+    "email": "project@gmail.com",
+    "license": "MIT",
+    "copyright_year": "2024"
+}

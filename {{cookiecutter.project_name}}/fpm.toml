@@ -1,0 +1,21 @@
+name = "{{cookiecutter.project_name}}"
+version = "{{cookiecutter.version}}"
+license = "{{cookiecutter.license}}"
+author = "{{cookiecutter.author}}"
+maintainer = "{{cookiecutter.email}}"
+copyright = "Copyright {{cookiecutter.copyright_year}}, {{cookiecutter.author}}"
+
+[build]
+auto-executables = true
+auto-tests = true
+auto-examples = true
+module-naming = false
+
+[install]
+library = true
+
+[fortran]
+implicit-typing = false
+implicit-external = false
+source-form = "free"
+
