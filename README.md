@@ -1,6 +1,7 @@
 # fortran_meson_py
 
 ## Table of contents
+- [Cookiecutter](#Cookiecutter)
 - [About the repository](#about-the-repository)
 - [Previous lectures (if needed)](#previous-lectures-if-needed)
   - [Fortran](#fortran)
@@ -14,6 +15,20 @@
   - [CI (`cibuildwheel`)](#ci-cibuildwheel)
   - [For VScode users](#for-vscode-users)
 
+
+## Cookiecutter
+You can create a new project from this repository's `cookiecutter` template. You
+can find it on the `cookies` branch. If you are not familiar with cookiecutter simply
+must do:
+
+```shell
+pip install cookiecutter
+```
+
+Then, in the folder you are going to start, your project
+```shell
+cookiecutter https://github.com/SalvadorBrandolin/fortran_meson_py --checkout cookies
+```
 
 ## About the repository
 Example of building Python API of Fortran project with Meson. 
