@@ -46,7 +46,7 @@ run_command(
 )
 
 # f2py
-source_path = meson.source_root() / '..' / 'c_wrapper' / 'fexample_c.f90'
+source_path = meson.project_source_root() / '..' / 'c_wrapper' / 'fexample_c.f90'
 fexample_c_f90 = files(source_path)
 
 fexample_source = custom_target('fexample_compiled.c',
