@@ -210,7 +210,7 @@ The correct way of doing that is bay the commands:
 
 ```shell
 cd python
-pip install -r python/build-requirements.txt
+pip install -r build-requirements.txt
 pip install -e . --no-build-isolation
 ```
 
